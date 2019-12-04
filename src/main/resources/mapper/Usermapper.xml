@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qf.dao.UserDao">
-    <update id="findBypic" parameterType="com.qf.pojo.User">
+    <select id="findBypic" parameterType="com.qf.pojo.User">
         select photo from where phone=#{phone}
-    </update>
+    </select>
+    <select id="findTJ" parameterType="com.qf.pojo.User" resultType="com.qf.pojo.User">
+        select * from user where 1=1
+        <if test="uid!=null and uid=''">
+          and uname like '%${uname}%'
+        </if>
+    </select>
 </mapper>

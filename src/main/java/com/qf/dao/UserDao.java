@@ -8,4 +8,6 @@ public interface UserDao {
     User findByName(String pass);
     //手机号调头像
      int findpp(float photo);
+     //条件查询
+    public User findTJ(User user);
 }

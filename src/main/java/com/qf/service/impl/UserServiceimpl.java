@@ -5,11 +5,14 @@ import com.qf.pojo.Eduexper;
 import com.qf.pojo.User;
 import com.qf.repository.EduexperRepository;
 import com.qf.repository.UserRepository;
+import com.qf.response.UserResponse;
 import com.qf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +20,10 @@ import java.util.Optional;
 public class UserServiceimpl implements UserService {
     @Autowired
     public UserRepository userRepository;
-   /* @Autowired
-    private UserDao userDao;*/
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private  User user;
    /* @Resource
     private UserDao userDaor;*/
     @Autowired
@@ -52,8 +57,12 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
-    public int findpp(float photo) {
-        return 0;
+    public String findpp(String photo) {
+        User byPhone = userRepository.findByPhone(photo);
+        if(byPhone.equals(user.getPhone())){
+            return user.getPhoto();
+        }
+        return null;
     }
 
     @Override
@@ -71,15 +80,43 @@ public class UserServiceimpl implements UserService {
         return userRepository.findAll();
     }
 
-   /* @Override
+    @Override
     public User userinsert(User user) {
-        return userRepository.findAll(user);
+        return userRepository.save(user);
+    }
+    //用户删除
+    @Override
+    public String datele(User user) {
+        try{
+            userRepository.deleteById(user.getUid());
+            return "success";
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return "fail";
     }
 
     @Override
-    public String datele(User user) {
-        return userRepository.delete(user);
-    }*/
+    public UserResponse findsp(Integer size, Integer page) {
+            if(page<0){
+                page=0;
+            }else {
+                page=page-1;
+            }
+        Pageable pages=PageRequest.of(page,size);
+        Page<User> all=userRepository.findAll(pages);
+        List<User> content=all.getContent();
+        UserResponse userResponse = new UserResponse();
+        userResponse.setList(content);
+        userResponse.setTotal(all.getTotalElements());
+        userResponse.setPage(all.getTotalPages());
+        return userResponse;
+    }
+
+    @Override
+    public User findTJ(User user) {
+        return userDao.findTJ(user);
+    }
 
     @Override
     public List<Eduexper> EfindAll() {

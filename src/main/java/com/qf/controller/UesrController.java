@@ -2,6 +2,7 @@ package com.qf.controller;
 
 import com.qf.cogfig.R;
 import com.qf.pojo.User;
+import com.qf.response.UserResponse;
 import com.qf.service.UserService;
 import com.qf.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,14 +84,13 @@ public class UesrController {
         }
         return 0;
     }
-  /*  //手机查头像
-    @RequestMapping("/pp")
-    public ModelAndView findpp(@RequestBody(phone)Integer phone){
-        int findpp = userService.findpp(phone);
-        ModelAndView modelAndView = new ModelAndView("");
-        modelAndView.addObject("findpp",findpp);
-        return modelAndView;
-    }*/
+   //手机查头像
+   @RequestMapping("/userpp")
+   @ResponseBody
+   public String userpp(@RequestBody String  phone){
+       String findpp = userService.findpp(phone);
+       return userService.findpp(findpp);
+   }
   //用户资料查询
   @RequestMapping(value = "/ufindAll",method = RequestMethod.GET)
   @ResponseBody
@@ -117,5 +117,39 @@ public class UesrController {
                 return "404";
             }
     }
+    //用户分页
+    @RequestMapping("/findsp/{size}/{page}")
+    @ResponseBody
+    public UserResponse findsp(@PathVariable("size")Integer size, @PathVariable("page")Integer page){
+      return userService.findsp(size,page);
+    }
+    //用户条件
+    @ResponseBody
+    @RequestMapping("/findTJ")
+    public User findTJ(@RequestBody User user){
+       /* String uname = user.getUname();
+        uname="%"+uname+"%";
+        user.setUname(uname);*/
+        return userService.findTJ(user);
+    }
+    //用户id调用
+    @RequestMapping(value = "/userfindOne",method = RequestMethod.POST)
+    @ResponseBody
+    public User findOne(@RequestBody User user){
+        int uid = user.getUid();
+        return userService.findById(uid);
+    }
 
+    //用户新增
+    @RequestMapping(value = "/userinsert",method = RequestMethod.POST)
+    @ResponseBody
+    public User userinsert(@RequestBody User user){
+      return  userService.userinsert(user);
+    }
+    //用户删除
+    @RequestMapping(value = "/userdelete",method = RequestMethod.POST)
+    @ResponseBody
+    public String userdelete(@RequestBody User user){
+      return  userService.datele(user);
+    }
 }

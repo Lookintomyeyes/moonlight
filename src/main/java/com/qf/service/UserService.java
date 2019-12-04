@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UserService {
     //注册新增用户
-    public User insert(User user);
+    public int insert(User user);
     //登录验证
-    public User login(int phone, String pass);
+    public User login(String phone, String pass);
     //个人信息修改
     public User userupdate(User user);
     //手机号调头像
@@ -18,6 +18,10 @@ public interface UserService {
     public User findById(Integer uid);
     //用户资料查询
     public  List<User> findAll();
+    //用户资料新增
+   /* public User userinsert(User user);
+    //用户资料删除
+    public String datele(User user);*/
     //查询教育经历
     public List<Eduexper> EfindAll();
     //教育信息修改

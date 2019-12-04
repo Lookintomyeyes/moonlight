@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
@@ -15,10 +16,11 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@RestController
+@Controller
 public class UesrController {
     @Value("${qiniu.url}")
     private String url;
@@ -34,7 +36,15 @@ public class UesrController {
     @Autowired
     TemplateEngine templateEngine;
     //注册 邮箱
+    @RequestMapping("/userinfo")
+    @ResponseBody
+    public User yong(HttpServletRequest request){
+        HttpSession session = request.getSession();
+       User userinfo = (User)session.getAttribute("userinfo");
+        return userinfo;
+    }
     @RequestMapping("/em")
+    @ResponseBody
     public Boolean emc(@RequestBody() String email) throws MessagingException {
         if (email!=null){
             Context context = new Context();
@@ -54,20 +64,24 @@ public class UesrController {
 
     }
     //注册  用户新增
-    @RequestMapping("/ins")
-    public User insert(@RequestBody User user){
+    @RequestMapping(value = "/ins",method = RequestMethod.POST)
+    @ResponseBody
+    public int insert(@RequestBody  User user){
+        System.out.println(user);
         return userService.insert(user);
     }
-   //登录验证   -------暂有问题
-    @RequestMapping("/log")
-    public R login(@RequestBody Integer phone, @RequestBody String pass, HttpSession session){
+   //登录验证
+    @RequestMapping(value = "/log/{phone}/{pass}",method = RequestMethod.POST)
+    @ResponseBody
+    public int login(@PathVariable("phone")String phone,@PathVariable("pass")String pass){
         User login = userService.login(phone,pass);
         if (login!=null){
             //success
-            session.setAttribute("user",login);
-            return R.ok();
+            /*HttpSession session = request.getSession();
+            session.setAttribute("userinfo",login);*/
+            return 1;
         }
-        return R.error();
+        return 0;
     }
   /*  //手机查头像
     @RequestMapping("/pp")
@@ -78,18 +92,21 @@ public class UesrController {
         return modelAndView;
     }*/
   //用户资料查询
-  @RequestMapping("ufindAll")
+  @RequestMapping(value = "/ufindAll",method = RequestMethod.GET)
+  @ResponseBody
   public List<User> ufindAll(){
       return userService.findAll();
   }
   //个人信息修改1
     @RequestMapping(value = "/uupdate1",method = RequestMethod.POST)
+    @ResponseBody
     public User uupdate1(@RequestBody User user){
         int uid = user.getUid();
         return userService.findById(uid);
     }
   //个人信息修改2
-    @RequestMapping("/uupdate2")
+    @RequestMapping(value = "/uupdate2",method = RequestMethod.POST)
+    @ResponseBody
     public String userup(User user, @RequestParam("file")MultipartFile mull){
             try{
                 String upload = uploadUtils.upload(mull);

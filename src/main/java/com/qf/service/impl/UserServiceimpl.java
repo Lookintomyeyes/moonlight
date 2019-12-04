@@ -17,21 +17,27 @@ import java.util.Optional;
 public class UserServiceimpl implements UserService {
     @Autowired
     public UserRepository userRepository;
-    @Autowired
-    public UserDao userDao;
-    @Resource
-    private UserDao userDaor;
+   /* @Autowired
+    private UserDao userDao;*/
+   /* @Resource
+    private UserDao userDaor;*/
     @Autowired
     private EduexperRepository eduexperRepository;
     //注册 新增用户
     @Override
-    public User insert(User user) {
-        return userRepository.save(user);
+    public int insert(User user) {
+        try {
+            userRepository.saveAndFlush(user);
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
+
     }
     //登录 验证信息
    @Override
-    public User login(int phone, String pass) {
-        User lu = userDaor.findByName(pass);
+    public User login(String phone, String pass) {
+        User lu = userRepository.findByPhone(phone);
         if (lu!=null){
             if (lu.getPass().equals(pass)){
                 return lu;
@@ -64,6 +70,16 @@ public class UserServiceimpl implements UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+   /* @Override
+    public User userinsert(User user) {
+        return userRepository.findAll(user);
+    }
+
+    @Override
+    public String datele(User user) {
+        return userRepository.delete(user);
+    }*/
 
     @Override
     public List<Eduexper> EfindAll() {

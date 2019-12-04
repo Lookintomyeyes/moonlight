@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qf.dao.Job1Dao">
+
+    <select id="findbylike"  resultType="Job1"  parameterType="com.qf.pojo.Job1">
+        SELECT
+        *
+        FROM
+        job1
+        WHERE 1=1
+        <if test="jname != null and jname != ''">
+           AND jname like #{jname}
+        </if>
+        <if test="district != null and district != ''">
+            OR district like #{district}
+        </if>
+    </select>
+</mapper>

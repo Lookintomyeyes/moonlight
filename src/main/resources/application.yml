@@ -2,9 +2,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql:///jianzhi?unicode=true&amp;characterEncoding=utf8
+    #url: jdbc:mysql://182.92.226.195/jianzhi?unicode=true&amp;characterEncoding=utf8
+    url: jdbc:mysql://182.92.226.195/jianzhi?useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: 123
   jpa:
     database: mysql
     show-sql: true

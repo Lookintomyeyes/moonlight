@@ -17,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int uid;
-    private int phone;//手机
+    private String phone;//手机
     private  String pass;
     private String photo;//头像
     private String uname;//姓名
@@ -26,9 +26,11 @@ public class User {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birth;//生日
-    private  String edustatus;//教育状态
+    private  String educatestu;//教育状态
     private String weixin;//微信
     private int worstatus;//兼职状态
-    private int money;//钱包
-    private int score;//信誉积分
+    private double money;//钱包
+    private double score;//信誉积分
+    private String eduexper;
+    private String edustatus;
 }
